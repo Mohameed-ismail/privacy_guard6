@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -21,16 +22,19 @@ jobs:
       - name: Unzip project
         run: unzip PrivacyShield_Android_Project.zip
 
-      - name: Give permission to Gradle
-        run: chmod +x PrivacyShield_Android_Project/gradlew
+      - name: Find Gradle project
+        run: |
+          PROJECT_DIR=$(find . -name "gradlew" | head -n 1 | xargs dirname)
+          echo "PROJECT_DIR=$PROJECT_DIR" >> $GITHUB_ENV
 
       - name: Build APK
         run: |
-          cd PrivacyShield_Android_Project
+          chmod +x $PROJECT_DIR/gradlew
+          cd $PROJECT_DIR
           ./gradlew assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: PrivacyShield-APK
-          path: PrivacyShield_Android_Project/app/build/outputs/apk/release/app-release.apk
+          path: '**/app/build/outputs/apk/release/*.apk'
