@@ -22,15 +22,15 @@ jobs:
         run: unzip PrivacyShield_Android_Project.zip
 
       - name: Give permission to Gradle
-        run: chmod +x PrivacyShield/gradlew
+        run: chmod +x PrivacyShield_Android_Project/gradlew
 
       - name: Build APK
         run: |
-          cd PrivacyShield
+          cd PrivacyShield_Android_Project
           ./gradlew assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
           name: PrivacyShield-APK
-          path: PrivacyShield/app/build/outputs/apk/release/app-release.apk
+          path: PrivacyShield_Android_Project/app/build/outputs/apk/release/app-release.apk
