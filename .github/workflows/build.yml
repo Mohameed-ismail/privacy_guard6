@@ -1,0 +1,36 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Unzip project
+        run: unzip PrivacyShield_Android_Project.zip
+
+      - name: Give permission to Gradle
+        run: chmod +x PrivacyShield/gradlew
+
+      - name: Build APK
+        run: |
+          cd PrivacyShield
+          ./gradlew assembleRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: PrivacyShield-APK
+          path: PrivacyShield/app/build/outputs/apk/release/app-release.apk
